@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -7,31 +7,55 @@ def home():
     return """
     <html>
     <head>
-        <title>My Flask Website</title>
+        <title>Titanic Survival Prediction</title>
         <style>
             body {
                 font-family: Arial;
                 text-align: center;
-                background: linear-gradient(to right, #4facfe, #00f2fe);
+                background: #0f172a;
                 color: white;
-                padding-top: 100px;
+                padding: 50px;
             }
-            .box {
-                background: rgba(0,0,0,0.3);
-                padding: 40px;
-                border-radius: 20px;
-                display: inline-block;
+            input, button {
+                padding: 10px;
+                margin: 5px;
+                border-radius: 5px;
+                border: none;
+            }
+            button {
+                background: #38bdf8;
+                cursor: pointer;
             }
         </style>
     </head>
     <body>
-        <div class="box">
-            <h1>🚀 My Flask Website</h1>
-            <p>Deployed successfully on Railway</p>
-            <h3>Welcome!</h3>
-        </div>
+        <h1>🚢 Titanic Survival Prediction</h1>
+
+        <form action="/predict" method="post">
+            <input name="age" placeholder="Age" required><br>
+            <input name="fare" placeholder="Fare" required><br>
+            <input name="pclass" placeholder="Class (1/2/3)" required><br>
+            <button type="submit">Predict</button>
+        </form>
     </body>
     </html>
+    """
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    age = float(request.form['age'])
+    fare = float(request.form['fare'])
+    pclass = int(request.form['pclass'])
+
+    # SIMPLE RULE-BASED MODEL (no ML file needed)
+    if pclass == 1 and fare > 50 and age < 50:
+        result = "✅ Survived"
+    else:
+        result = "❌ Not Survived"
+
+    return f"""
+    <h1>{result}</h1>
+    <br><a href='/'>Go Back</a>
     """
 
 if __name__ == "__main__":
