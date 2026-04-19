@@ -12,19 +12,25 @@ def home():
             body {
                 font-family: Arial;
                 text-align: center;
-                background: linear-gradient(135deg, #1e3c72, #2a5298);
+                background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
                 color: white;
                 margin: 0;
                 padding: 0;
             }
 
-            h1 {
+            .hero {
+                margin-top: 40px;
+            }
+
+            .title {
+                font-size: 40px;
+                font-weight: bold;
                 margin-top: 20px;
             }
 
-            .intro {
-                margin-top: 10px;
+            .subtitle {
                 font-size: 18px;
+                margin-top: 10px;
                 opacity: 0.9;
             }
 
@@ -49,7 +55,7 @@ def home():
 
             button {
                 width: 95%;
-                padding: 10px;
+                padding: 12px;
                 background: #00c6ff;
                 border: none;
                 border-radius: 8px;
@@ -62,24 +68,29 @@ def home():
             button:hover {
                 background: #0072ff;
             }
+
+            .footer-text {
+                margin-top: 20px;
+                font-size: 14px;
+                opacity: 0.7;
+            }
         </style>
     </head>
 
     <body>
 
-        <h1>🚢 Titanic Survival Prediction</h1>
-
-        <div class="intro">
-            You are going to predict whether a passenger survived the Titanic disaster based on input details.
+        <div class="hero">
+            <div class="title">🚢 Titanic Survival Prediction</div>
+            <div class="subtitle">Enter details to predict whether a passenger survived or not</div>
         </div>
 
         <div class="box">
 
             <form action="/predict" method="post">
 
-                <input name="age" placeholder="Age" required><br>
+                <input name="age" placeholder="Enter Age" required><br>
 
-                <input name="fare" placeholder="Fare" required><br>
+                <input name="fare" placeholder="Enter Fare" required><br>
 
                 <select name="pclass" required>
                     <option value="">Select Class</option>
@@ -103,10 +114,14 @@ def home():
                     <option value="4">4+</option>
                 </select><br>
 
-                <button type="submit">Predict Survival</button>
+                <button type="submit">Enter to Predict Titanic 🚢</button>
 
             </form>
 
+        </div>
+
+        <div class="footer-text">
+            Built with Flask • AI Style Project
         </div>
 
     </body>
@@ -131,7 +146,7 @@ def predict():
 
     # Gender effect
     if sex == 1:
-        score += 30  # female advantage
+        score += 30
 
     # Age effect
     if age < 18:
