@@ -104,8 +104,20 @@ def predict():
     fare = float(request.form['fare'])
     pclass = int(request.form['pclass'])
 
-    # Simple logic model
-    if pclass == 1 and fare > 50 and age < 50:
+    # Simple probability logic (demo ML style)
+    probability = 0
+
+    if pclass == 1:
+        probability += 50
+    if fare > 50:
+        probability += 30
+    if age < 50:
+        probability += 20
+
+    if probability > 100:
+        probability = 100
+
+    if probability >= 50:
         result = "✅ Survived"
     else:
         result = "❌ Not Survived"
@@ -114,10 +126,8 @@ def predict():
     <html>
     <body style="text-align:center; font-family:Arial; background:#0f172a; color:white; padding-top:100px;">
         <h1>{result}</h1>
+        <h2>📊 Survival Probability: {probability}%</h2>
         <a href="/" style="color:#00c6ff;">🔙 Go Back</a>
     </body>
     </html>
     """
-
-if __name__ == "__main__":
-    app.run()
