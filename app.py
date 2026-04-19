@@ -10,33 +10,90 @@ def home():
         <title>Titanic Survival Prediction</title>
         <style>
             body {
+                margin: 0;
                 font-family: Arial;
-                text-align: center;
-                background: #0f172a;
+                background: linear-gradient(135deg, #1e3c72, #2a5298);
                 color: white;
-                padding: 50px;
+                text-align: center;
             }
-            input, button {
+
+            .container {
+                margin-top: 60px;
+            }
+
+            .card {
+                background: rgba(255,255,255,0.1);
+                padding: 30px;
+                width: 350px;
+                margin: auto;
+                border-radius: 15px;
+                box-shadow: 0px 0px 20px rgba(0,0,0,0.3);
+                backdrop-filter: blur(10px);
+            }
+
+            input {
+                width: 90%;
                 padding: 10px;
-                margin: 5px;
-                border-radius: 5px;
+                margin: 10px 0;
+                border-radius: 8px;
                 border: none;
+                outline: none;
             }
+
             button {
-                background: #38bdf8;
+                width: 95%;
+                padding: 10px;
+                background: #00c6ff;
+                border: none;
+                border-radius: 8px;
+                color: white;
+                font-size: 16px;
                 cursor: pointer;
+                transition: 0.3s;
+            }
+
+            button:hover {
+                background: #0072ff;
+            }
+
+            .info {
+                margin-top: 40px;
+                padding: 20px;
+                background: rgba(0,0,0,0.3);
+                width: 60%;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 10px;
+            }
+
+            h1 {
+                margin-top: 30px;
             }
         </style>
     </head>
+
     <body>
+
         <h1>🚢 Titanic Survival Prediction</h1>
 
-        <form action="/predict" method="post">
-            <input name="age" placeholder="Age" required><br>
-            <input name="fare" placeholder="Fare" required><br>
-            <input name="pclass" placeholder="Class (1/2/3)" required><br>
-            <button type="submit">Predict</button>
-        </form>
+        <div class="container">
+            <div class="card">
+                <form action="/predict" method="post">
+                    <input name="age" placeholder="Enter Age" required><br>
+                    <input name="fare" placeholder="Enter Fare" required><br>
+                    <input name="pclass" placeholder="Class (1 / 2 / 3)" required><br>
+                    <button type="submit">Predict Survival</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="info">
+            <h2>📘 What do these inputs mean?</h2>
+            <p><b>Age:</b> Age of the passenger on the Titanic</p>
+            <p><b>Fare:</b> Ticket price paid by passenger</p>
+            <p><b>Class:</b> Passenger class (1 = Rich, 2 = Middle, 3 = Low)</p>
+        </div>
+
     </body>
     </html>
     """
@@ -47,15 +104,19 @@ def predict():
     fare = float(request.form['fare'])
     pclass = int(request.form['pclass'])
 
-    # SIMPLE RULE-BASED MODEL (no ML file needed)
+    # Simple logic model
     if pclass == 1 and fare > 50 and age < 50:
         result = "✅ Survived"
     else:
         result = "❌ Not Survived"
 
     return f"""
-    <h1>{result}</h1>
-    <br><a href='/'>Go Back</a>
+    <html>
+    <body style="text-align:center; font-family:Arial; background:#0f172a; color:white; padding-top:100px;">
+        <h1>{result}</h1>
+        <a href="/" style="color:#00c6ff;">🔙 Go Back</a>
+    </body>
+    </html>
     """
 
 if __name__ == "__main__":
