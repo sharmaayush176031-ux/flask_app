@@ -96,22 +96,14 @@ def home():
                     <option value="0">Male</option>
                 </select><br>
 
-                <!-- SIBSP -->
-                <select name="sibsp" required>
-                    <option value="">Siblings / Spouse</option>
-                    <option value="0">0</option>
+                <!-- FAMILY SIZE -->
+                <select name="family" required>
+                    <option value="">Family Size</option>
+                    <option value="0">0 (Alone)</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3+</option>
-                </select><br>
-
-                <!-- PARCH -->
-                <select name="parch" required>
-                    <option value="">Parents / Children</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3+</option>
+                    <option value="3">3</option>
+                    <option value="4">4+</option>
                 </select><br>
 
                 <button type="submit">Predict Survival</button>
@@ -125,8 +117,7 @@ def home():
             <p><b>Fare:</b> Ticket price</p>
             <p><b>Class:</b> 1 = Rich, 2 = Middle, 3 = Low</p>
             <p><b>Gender:</b> Female or Male</p>
-            <p><b>SibSp:</b> Siblings / spouse aboard</p>
-            <p><b>Parch:</b> Parents / children aboard</p>
+            <p><b>Family Size:</b> Number of family members aboard</p>
         </div>
 
     </body>
@@ -139,10 +130,8 @@ def predict():
     fare = float(request.form['fare'])
     pclass = int(request.form['pclass'])
     sex = int(request.form['sex'])
-    sibsp = int(request.form['sibsp'])
-    parch = int(request.form['parch'])
+    family = int(request.form['family'])
 
-    # Score system
     score = 0
 
     # Class effect
@@ -153,7 +142,7 @@ def predict():
 
     # Gender effect
     if sex == 1:
-        score += 30  # female higher chance
+        score += 30  # female advantage
 
     # Age effect
     if age < 18:
@@ -166,9 +155,11 @@ def predict():
         score += 10
 
     # Family effect
-    if sibsp > 0:
-        score += 5
-    if parch > 0:
+    if family == 0:
+        score -= 5
+    elif family in [1, 2]:
+        score += 10
+    else:
         score += 5
 
     if score > 100:
