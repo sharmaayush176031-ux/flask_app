@@ -15,15 +15,13 @@ def home():
                 font-family: Arial;
                 text-align: center;
                 color: white;
-
-                /* Titanic-style ocean background */
                 background: url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80');
                 background-size: cover;
                 background-position: center;
             }
 
             .overlay {
-                background: rgba(0,0,0,0.6);
+                background: rgba(0,0,0,0.65);
                 height: 100vh;
                 display: flex;
                 flex-direction: column;
@@ -46,7 +44,6 @@ def home():
                 margin-top: 40px;
                 padding: 15px 35px;
                 font-size: 18px;
-                border: none;
                 border-radius: 10px;
                 background: #00c6ff;
                 color: white;
@@ -62,24 +59,22 @@ def home():
     </head>
 
     <body>
-
         <div class="overlay">
 
             <div class="title">🚢 Titanic Prediction Simulator</div>
 
             <div class="subtitle">
-                Enter passenger details and predict survival probability
+                Enter passenger details to predict survival
             </div>
 
             <a class="btn" href="/predictor">Enter 🚀</a>
 
         </div>
-
     </body>
     </html>
     """
 
-# ---------------- FORM PAGE ----------------
+# ---------------- INPUT PAGE ----------------
 @app.route('/predictor')
 def predictor():
     return """
@@ -121,17 +116,10 @@ def predictor():
                 border-radius: 8px;
                 color: white;
                 font-size: 16px;
-                cursor: pointer;
             }
 
             button:hover {
                 background: #0072ff;
-            }
-
-            .note {
-                font-size: 12px;
-                opacity: 0.8;
-                margin-bottom: 10px;
             }
         </style>
     </head>
@@ -161,18 +149,13 @@ def predictor():
                     <option value="0">Male</option>
                 </select><br>
 
-                <!-- FAMILY -->
                 <select name="family" required>
                     <option value="">Family Size</option>
-                    <option value="1">1 (Alone)</option>
+                    <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4+</option>
                 </select>
-
-                <div class="note">
-                    * 1 means Alone
-                </div>
 
                 <button type="submit">Enter Prediction 🚢</button>
 
@@ -184,7 +167,7 @@ def predictor():
     </html>
     """
 
-# ---------------- RESULT PAGE ----------------
+# ---------------- RESULT PAGE (UPGRADED LIKE START SCREEN) ----------------
 @app.route('/predict', methods=['POST'])
 def predict():
     age = float(request.form['age'])
@@ -195,29 +178,24 @@ def predict():
 
     score = 0
 
-    # class impact
     if pclass == 1:
         score += 40
     elif pclass == 2:
         score += 20
 
-    # gender impact
     if sex == 1:
         score += 30
 
-    # age impact
     if age < 18:
         score += 20
     elif age > 60:
         score -= 10
 
-    # fare impact
     if fare > 50:
         score += 10
 
-    # family impact
     if family == 1:
-        score -= 5   # alone
+        score -= 5
     elif family == 2:
         score += 10
     elif family == 3:
@@ -238,20 +216,29 @@ def predict():
         <title>Result</title>
         <style>
             body {{
+                margin: 0;
                 font-family: Arial;
                 text-align: center;
-                background: #0f172a;
                 color: white;
-                padding-top: 80px;
+                background: url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80');
+                background-size: cover;
+                background-position: center;
+            }}
+
+            .overlay {{
+                background: rgba(0,0,0,0.7);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }}
 
             .card {{
                 background: rgba(255,255,255,0.08);
-                width: 350px;
-                margin: auto;
-                padding: 30px;
+                padding: 40px;
                 border-radius: 15px;
-                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+                width: 350px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.6);
             }}
 
             .bar {{
@@ -273,22 +260,28 @@ def predict():
                 margin-top: 20px;
                 color: #00c6ff;
                 text-decoration: none;
+                font-size: 16px;
             }}
         </style>
     </head>
 
     <body>
 
-        <div class="card">
+        <div class="overlay">
 
-            <h1>{result}</h1>
-            <h2>📊 Probability: {score}%</h2>
+            <div class="card">
 
-            <div class="bar">
-                <div class="fill"></div>
+                <h1>{result}</h1>
+
+                <h2>📊 Survival Probability: {score}%</h2>
+
+                <div class="bar">
+                    <div class="fill"></div>
+                </div>
+
+                <a href="/">🏠 Back to Home</a>
+
             </div>
-
-            <a href="/">🔙 Back to Home</a>
 
         </div>
 
