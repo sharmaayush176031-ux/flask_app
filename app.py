@@ -19,11 +19,17 @@ def home():
             }
 
             h1 {
-                margin-top: 30px;
+                margin-top: 20px;
+            }
+
+            .intro {
+                margin-top: 10px;
+                font-size: 18px;
+                opacity: 0.9;
             }
 
             .box {
-                margin-top: 40px;
+                margin-top: 30px;
                 display: inline-block;
                 background: rgba(0,0,0,0.35);
                 padding: 30px;
@@ -56,22 +62,16 @@ def home():
             button:hover {
                 background: #0072ff;
             }
-
-            .info {
-                margin-top: 30px;
-                background: rgba(0,0,0,0.25);
-                padding: 20px;
-                width: 70%;
-                margin-left: auto;
-                margin-right: auto;
-                border-radius: 10px;
-            }
         </style>
     </head>
 
     <body>
 
         <h1>🚢 Titanic Survival Prediction</h1>
+
+        <div class="intro">
+            You are going to predict whether a passenger survived the Titanic disaster based on input details.
+        </div>
 
         <div class="box">
 
@@ -81,7 +81,6 @@ def home():
 
                 <input name="fare" placeholder="Fare" required><br>
 
-                <!-- CLASS -->
                 <select name="pclass" required>
                     <option value="">Select Class</option>
                     <option value="1">1st Class (Rich)</option>
@@ -89,14 +88,12 @@ def home():
                     <option value="3">3rd Class (Low)</option>
                 </select><br>
 
-                <!-- GENDER -->
                 <select name="sex" required>
                     <option value="">Select Gender</option>
                     <option value="1">Female</option>
                     <option value="0">Male</option>
                 </select><br>
 
-                <!-- FAMILY SIZE -->
                 <select name="family" required>
                     <option value="">Family Size</option>
                     <option value="0">0 (Alone)</option>
@@ -109,15 +106,7 @@ def home():
                 <button type="submit">Predict Survival</button>
 
             </form>
-        </div>
 
-        <div class="info">
-            <h2>📘 Feature Meaning</h2>
-            <p><b>Age:</b> Passenger age</p>
-            <p><b>Fare:</b> Ticket price</p>
-            <p><b>Class:</b> 1 = Rich, 2 = Middle, 3 = Low</p>
-            <p><b>Gender:</b> Female or Male</p>
-            <p><b>Family Size:</b> Number of family members aboard</p>
         </div>
 
     </body>
