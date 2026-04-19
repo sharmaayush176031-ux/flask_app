@@ -5,44 +5,38 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import pickle
 
-# ---------------- LOAD DATA ----------------
-# Make sure train.csv (Kaggle Titanic dataset) is in same folder
+# Load dataset
 df = pd.read_csv("train.csv")
 
-# ---------------- SELECT IMPORTANT FEATURES ----------------
+# Select features
 df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']]
 
-# ---------------- HANDLE MISSING VALUES ----------------
+# Handle missing values
 df['Age'].fillna(df['Age'].mean(), inplace=True)
 
-# ---------------- ENCODE SEX ----------------
+# Encode Sex
 le = LabelEncoder()
-df['Sex'] = le.fit_transform(df['Sex'])  # male=1, female=0
+df['Sex'] = le.fit_transform(df['Sex'])
 
-# ---------------- SPLIT DATA ----------------
+# Split data
 X = df[['Pclass', 'Sex', 'Age', 'Fare']]
 y = df['Survived']
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-# ---------------- MODEL 1: RANDOM FOREST ----------------
-rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_model.fit(X_train, y_train)
+# Models
+rf = RandomForestClassifier()
+nb = GaussianNB()
 
-rf_acc = rf_model.score(X_test, y_test)
-print("Random Forest Accuracy:", rf_acc)
+rf.fit(X_train, y_train)
+nb.fit(X_train, y_train)
 
-# ---------------- MODEL 2: NAIVE BAYES ----------------
-nb_model = GaussianNB()
-nb_model.fit(X_train, y_train)
+# Accuracy
+print("Random Forest Accuracy:", rf.score(X_test, y_test))
+print("Naive Bayes Accuracy:", nb.score(X_test, y_test))
 
-nb_acc = nb_model.score(X_test, y_test)
-print("Naive Bayes Accuracy:", nb_acc)
+# Save models
+pickle.dump(rf, open("model_rf.pkl", "wb"))
+pickle.dump(nb, open("model_nb.pkl", "wb"))
 
-# ---------------- SAVE MODELS ----------------
-pickle.dump(rf_model, open("model_rf.pkl", "wb"))
-pickle.dump(nb_model, open("model_nb.pkl", "wb"))
-
-print("\nModels saved successfully ✔")
+print("Models saved ✔")
