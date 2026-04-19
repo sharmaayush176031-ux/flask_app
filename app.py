@@ -18,10 +18,14 @@ def home():
                 padding: 0;
             }
 
+            h1 {
+                margin-top: 30px;
+            }
+
             .box {
-                margin-top: 50px;
+                margin-top: 40px;
                 display: inline-block;
-                background: rgba(0,0,0,0.3);
+                background: rgba(0,0,0,0.35);
                 padding: 30px;
                 border-radius: 15px;
                 width: 350px;
@@ -46,6 +50,7 @@ def home():
                 color: white;
                 font-size: 16px;
                 cursor: pointer;
+                transition: 0.3s;
             }
 
             button:hover {
@@ -54,7 +59,7 @@ def home():
 
             .info {
                 margin-top: 30px;
-                background: rgba(0,0,0,0.2);
+                background: rgba(0,0,0,0.25);
                 padding: 20px;
                 width: 70%;
                 margin-left: auto;
@@ -69,22 +74,45 @@ def home():
         <h1>🚢 Titanic Survival Prediction</h1>
 
         <div class="box">
+
             <form action="/predict" method="post">
 
                 <input name="age" placeholder="Age" required><br>
 
                 <input name="fare" placeholder="Fare" required><br>
 
-                <input name="pclass" placeholder="Class (1/2/3)" required><br>
+                <!-- CLASS -->
+                <select name="pclass" required>
+                    <option value="">Select Class</option>
+                    <option value="1">1st Class (Rich)</option>
+                    <option value="2">2nd Class (Middle)</option>
+                    <option value="3">3rd Class (Low)</option>
+                </select><br>
 
+                <!-- GENDER -->
                 <select name="sex" required>
+                    <option value="">Select Gender</option>
                     <option value="1">Female</option>
                     <option value="0">Male</option>
                 </select><br>
 
-                <input name="sibsp" placeholder="Siblings/Spouse (SibSp)" required><br>
+                <!-- SIBSP -->
+                <select name="sibsp" required>
+                    <option value="">Siblings / Spouse</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3+</option>
+                </select><br>
 
-                <input name="parch" placeholder="Parents/Children (Parch)" required><br>
+                <!-- PARCH -->
+                <select name="parch" required>
+                    <option value="">Parents / Children</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3+</option>
+                </select><br>
 
                 <button type="submit">Predict Survival</button>
 
@@ -93,10 +121,10 @@ def home():
 
         <div class="info">
             <h2>📘 Feature Meaning</h2>
-            <p><b>Age:</b> Age of passenger</p>
-            <p><b>Fare:</b> Ticket price paid</p>
+            <p><b>Age:</b> Passenger age</p>
+            <p><b>Fare:</b> Ticket price</p>
             <p><b>Class:</b> 1 = Rich, 2 = Middle, 3 = Low</p>
-            <p><b>Sex:</b> Gender of passenger</p>
+            <p><b>Gender:</b> Female or Male</p>
             <p><b>SibSp:</b> Siblings / spouse aboard</p>
             <p><b>Parch:</b> Parents / children aboard</p>
         </div>
@@ -114,6 +142,7 @@ def predict():
     sibsp = int(request.form['sibsp'])
     parch = int(request.form['parch'])
 
+    # Score system
     score = 0
 
     # Class effect
@@ -157,7 +186,7 @@ def predict():
         <h2>📊 Survival Score: {score}%</h2>
 
         <br><br>
-        <a href="/" style="color:#00c6ff;">🔙 Try Again</a>
+        <a href="/" style="color:#00c6ff; font-size:18px;">🔙 Try Again</a>
 
     </body>
     </html>
