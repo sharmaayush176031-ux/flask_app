@@ -2,46 +2,80 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+# ---------------- HOME SCREEN ----------------
 @app.route('/')
 def home():
     return """
     <html>
     <head>
-        <title>Titanic Survival Prediction</title>
+        <title>Titanic Simulator</title>
         <style>
             body {
                 font-family: Arial;
                 text-align: center;
-                background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+                background: linear-gradient(135deg, #141e30, #243b55);
                 color: white;
                 margin: 0;
                 padding: 0;
             }
 
-            .hero {
-                margin-top: 40px;
-            }
-
             .title {
-                font-size: 40px;
+                font-size: 42px;
+                margin-top: 120px;
                 font-weight: bold;
-                margin-top: 20px;
             }
 
-            .subtitle {
+            .btn {
+                margin-top: 40px;
+                padding: 15px 30px;
                 font-size: 18px;
-                margin-top: 10px;
-                opacity: 0.9;
+                border: none;
+                border-radius: 10px;
+                background: #00c6ff;
+                color: white;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .btn:hover {
+                background: #0072ff;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="title">🚢 Titanic Prediction Simulator</div>
+
+        <a href="/predictor" class="btn">Enter Simulation 🚀</a>
+
+    </body>
+    </html>
+    """
+
+# ---------------- FORM ----------------
+@app.route('/predictor')
+def predictor():
+    return """
+    <html>
+    <head>
+        <title>Predict</title>
+        <style>
+            body {
+                font-family: Arial;
+                text-align: center;
+                background: linear-gradient(135deg, #1e3c72, #2a5298);
+                color: white;
             }
 
             .box {
-                margin-top: 30px;
+                margin-top: 50px;
                 display: inline-block;
                 background: rgba(0,0,0,0.35);
                 padding: 30px;
                 border-radius: 15px;
                 width: 350px;
-                box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
             }
 
             input, select {
@@ -50,84 +84,65 @@ def home():
                 margin: 8px 0;
                 border-radius: 8px;
                 border: none;
-                outline: none;
             }
 
             button {
                 width: 95%;
-                padding: 12px;
+                padding: 10px;
                 background: #00c6ff;
                 border: none;
                 border-radius: 8px;
                 color: white;
                 font-size: 16px;
-                cursor: pointer;
-                transition: 0.3s;
             }
 
             button:hover {
                 background: #0072ff;
-            }
-
-            .footer-text {
-                margin-top: 20px;
-                font-size: 14px;
-                opacity: 0.7;
             }
         </style>
     </head>
 
     <body>
 
-        <div class="hero">
-            <div class="title">🚢 Titanic Survival Prediction</div>
-            <div class="subtitle">Enter details to predict whether a passenger survived or not</div>
-        </div>
+        <h1>🚢 Titanic Survival Prediction</h1>
 
         <div class="box">
 
             <form action="/predict" method="post">
 
-                <input name="age" placeholder="Enter Age" required><br>
+                <input name="age" placeholder="Age" required><br>
 
-                <input name="fare" placeholder="Enter Fare" required><br>
+                <input name="fare" placeholder="Fare" required><br>
 
                 <select name="pclass" required>
-                    <option value="">Select Class</option>
-                    <option value="1">1st Class (Rich)</option>
-                    <option value="2">2nd Class (Middle)</option>
-                    <option value="3">3rd Class (Low)</option>
+                    <option value="">Class</option>
+                    <option value="1">1st Class</option>
+                    <option value="2">2nd Class</option>
+                    <option value="3">3rd Class</option>
                 </select><br>
 
                 <select name="sex" required>
-                    <option value="">Select Gender</option>
+                    <option value="">Gender</option>
                     <option value="1">Female</option>
                     <option value="0">Male</option>
                 </select><br>
 
+                <!-- ONLY FAMILY = 1 -->
                 <select name="family" required>
-                    <option value="">Family Size</option>
-                    <option value="0">0 (Alone)</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4+</option>
+                    <option value="1">Alone (1)</option>
                 </select><br>
 
-                <button type="submit">Enter to Predict Titanic 🚢</button>
+                <button type="submit">Predict Survival</button>
 
             </form>
 
-        </div>
-
-        <div class="footer-text">
-            Built with Flask • AI Style Project
         </div>
 
     </body>
     </html>
     """
 
+# ---------------- PREDICTION ----------------
 @app.route('/predict', methods=['POST'])
 def predict():
     age = float(request.form['age'])
@@ -138,33 +153,24 @@ def predict():
 
     score = 0
 
-    # Class effect
     if pclass == 1:
         score += 40
     elif pclass == 2:
         score += 20
 
-    # Gender effect
     if sex == 1:
         score += 30
 
-    # Age effect
     if age < 18:
         score += 20
     elif age > 60:
         score -= 10
 
-    # Fare effect
     if fare > 50:
         score += 10
 
-    # Family effect
-    if family == 0:
-        score -= 5
-    elif family in [1, 2]:
-        score += 10
-    else:
-        score += 5
+    # family always alone (1)
+    score -= 5
 
     if score > 100:
         score = 100
@@ -173,15 +179,67 @@ def predict():
 
     result = "✅ Survived" if score >= 50 else "❌ Not Survived"
 
+    # ---------------- RESULT UI ----------------
     return f"""
     <html>
-    <body style="text-align:center; font-family:Arial; background:#0f172a; color:white; padding-top:100px;">
+    <head>
+        <title>Result</title>
+        <style>
+            body {{
+                font-family: Arial;
+                background: #0f172a;
+                color: white;
+                text-align: center;
+                padding-top: 80px;
+            }}
 
-        <h1>{result}</h1>
-        <h2>📊 Survival Score: {score}%</h2>
+            .card {{
+                background: rgba(255,255,255,0.08);
+                padding: 30px;
+                border-radius: 15px;
+                width: 350px;
+                margin: auto;
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            }}
 
-        <br><br>
-        <a href="/" style="color:#00c6ff; font-size:18px;">🔙 Try Again</a>
+            .bar {{
+                width: 100%;
+                background: #333;
+                border-radius: 10px;
+                margin-top: 20px;
+            }}
+
+            .fill {{
+                height: 20px;
+                width: {score}%;
+                background: linear-gradient(90deg, #00c6ff, #0072ff);
+                border-radius: 10px;
+            }}
+
+            .btn {{
+                margin-top: 20px;
+                display: inline-block;
+                color: #00c6ff;
+                text-decoration: none;
+            }}
+        </style>
+    </head>
+
+    <body>
+
+        <div class="card">
+
+            <h1>{result}</h1>
+
+            <h2>📊 Probability: {score}%</h2>
+
+            <div class="bar">
+                <div class="fill"></div>
+            </div>
+
+            <a class="btn" href="/">🔙 Try Again</a>
+
+        </div>
 
     </body>
     </html>
