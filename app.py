@@ -80,23 +80,36 @@ def predictor():
     return """
     <html>
     <head>
-        <title>Prediction</title>
+        <title>Titanic Prediction</title>
         <style>
             body {
+                margin: 0;
                 font-family: Arial;
                 text-align: center;
-                background: linear-gradient(135deg, #141e30, #243b55);
                 color: white;
+                background: url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80');
+                background-size: cover;
+                background-position: center;
+            }
+
+            .overlay {
+                background: rgba(0,0,0,0.7);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .box {
-                margin-top: 40px;
-                display: inline-block;
                 background: rgba(255,255,255,0.08);
                 padding: 30px;
                 border-radius: 15px;
                 width: 350px;
                 backdrop-filter: blur(10px);
+            }
+
+            h1 {
+                margin-bottom: 20px;
             }
 
             input, select {
@@ -116,6 +129,7 @@ def predictor():
                 border-radius: 8px;
                 color: white;
                 font-size: 16px;
+                cursor: pointer;
             }
 
             button:hover {
@@ -126,40 +140,45 @@ def predictor():
 
     <body>
 
-        <h1>🚢 Titanic Survival Prediction</h1>
+        <div class="overlay">
 
-        <div class="box">
+            <div class="box">
 
-            <form action="/predict" method="post">
+                <h1>🚢 Titanic Prediction</h1>
 
-                <input name="age" placeholder="Age" required><br>
+                <form action="/predict" method="post">
 
-                <input name="fare" placeholder="Fare" required><br>
+                    <input name="age" placeholder="Age" required><br>
 
-                <select name="pclass" required>
-                    <option value="">Select Class</option>
-                    <option value="1">1st Class (Rich)</option>
-                    <option value="2">2nd Class (Middle)</option>
-                    <option value="3">3rd Class (Low)</option>
-                </select><br>
+                    <input name="fare" placeholder="Fare" required><br>
 
-                <select name="sex" required>
-                    <option value="">Select Gender</option>
-                    <option value="1">Female</option>
-                    <option value="0">Male</option>
-                </select><br>
+                    <select name="pclass" required>
+                        <option value="">Select Class</option>
+                        <option value="1">1st Class (Rich)</option>
+                        <option value="2">2nd Class (Middle)</option>
+                        <option value="3">3rd Class (Low)</option>
+                    </select><br>
 
-                <select name="family" required>
-                    <option value="">Family Size</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4+</option>
-                </select>
+                    <select name="sex" required>
+                        <option value="">Select Gender</option>
+                        <option value="1">Female</option>
+                        <option value="0">Male</option>
+                    </select><br>
 
-                <button type="submit">Enter Prediction 🚢</button>
+                    <!-- FAMILY UPDATED -->
+                    <select name="family" required>
+                        <option value="">Family Size</option>
+                        <option value="1">1 (Alone)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4+</option>
+                    </select><br>
 
-            </form>
+                    <button type="submit">Predict Survival 🚢</button>
+
+                </form>
+
+            </div>
 
         </div>
 
@@ -167,7 +186,7 @@ def predictor():
     </html>
     """
 
-# ---------------- RESULT PAGE (UPGRADED LIKE START SCREEN) ----------------
+# ---------------- RESULT PAGE ----------------
 @app.route('/predict', methods=['POST'])
 def predict():
     age = float(request.form['age'])
@@ -238,7 +257,7 @@ def predict():
                 padding: 40px;
                 border-radius: 15px;
                 width: 350px;
-                box-shadow: 0 0 20px rgba(0,0,0,0.6);
+                backdrop-filter: blur(10px);
             }}
 
             .bar {{
@@ -260,7 +279,6 @@ def predict():
                 margin-top: 20px;
                 color: #00c6ff;
                 text-decoration: none;
-                font-size: 16px;
             }}
         </style>
     </head>
@@ -272,7 +290,6 @@ def predict():
             <div class="card">
 
                 <h1>{result}</h1>
-
                 <h2>📊 Survival Probability: {score}%</h2>
 
                 <div class="bar">
